@@ -26,11 +26,11 @@ export default function Layout(Props) {
 
 
 
+
     return (
         <>
 
                 <Box sx={{ display: 'flex' }}>
-                    <CssBaseline />
                     <Appbar handleDrawerToggle={handleDrawerToggle}/>
                     <Sidebar window={window} mobileOpen={mobileOpen} handleDrawerToggle={handleDrawerToggle}/>
                     <Box

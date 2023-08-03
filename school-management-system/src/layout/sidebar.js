@@ -1,48 +1,42 @@
 import React from 'react';
 import Drawer from "@mui/material/Drawer";
 import Box from "@mui/material/Box";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
-import ListItemText from "@mui/material/ListItemText";
-import Divider from "@mui/material/Divider";
+import TreeView from '@mui/lab/TreeView';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import TreeItem from '@mui/lab/TreeItem';
+import treeItems from "./menuItem";
 
 const drawerWidth = 240;
 function Sidebar(props) {
     const {window,mobileOpen,handleDrawerToggle} = props;
 
 
+    const getTreeItemsFromData = (treeItem) => {
+        return treeItem.map(treeItemData => {
+            let children = undefined;
+            if (treeItemData.children && treeItemData.children.length > 0) {
+                children = getTreeItemsFromData(treeItemData.children);
+            }
+            return (
+                <TreeItem
+                    key={treeItemData.id}
+                    nodeId={treeItemData.id}
+                    label={treeItemData.name}
+                    children={children}
+                />
+            );
+        });
+    };
 
     const drawer = (
         <div>
-            <List>
-                {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                    <ListItem key={text} disablePadding>
-                        <ListItemButton>
-                            <ListItemIcon>
-                                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                            </ListItemIcon>
-                            <ListItemText primary={text} />
-                        </ListItemButton>
-                    </ListItem>
-                ))}
-            </List>
-            <Divider />
-            <List>
-                {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                    <ListItem key={text} disablePadding>
-                        <ListItemButton>
-                            <ListItemIcon>
-                                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                            </ListItemIcon>
-                            <ListItemText primary={text} />
-                        </ListItemButton>
-                    </ListItem>
-                ))}
-            </List>
+            <TreeView
+                defaultCollapseIcon={<ExpandMoreIcon />}
+                defaultExpandIcon={<ChevronRightIcon />}
+            >
+                {getTreeItemsFromData(treeItems)}
+            </TreeView>
         </div>
     );
     const container = window !== undefined ? () => window().document.body : undefined;
