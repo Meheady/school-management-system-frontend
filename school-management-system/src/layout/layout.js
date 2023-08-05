@@ -1,31 +1,42 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import CssBaseline from '@mui/material/CssBaseline';
-import Divider from '@mui/material/Divider';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import MailIcon from '@mui/icons-material/Mail';
 import Toolbar from '@mui/material/Toolbar';
 import Appbar from "./appbar";
 import Head from "next/head";
 import Sidebar from "./sidebar";
+import {useEffect} from "react";
+import {useRouter} from "next/router";
 
 
 const drawerWidth = 240;
 export default function Layout(Props) {
     const { window, children } = Props;
+    const router = useRouter();
     const [mobileOpen, setMobileOpen] = React.useState(false);
+    const [isAuthenticate, setAuthenticate] = React.useState(false);
+
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
     };
 
 
+    useEffect(()=>{
+        const token = localStorage.getItem('jwtAuth');
+        if (!token){
+            setAuthenticate(false)
+            router.push('/login')
+        }
+        else{
+            setAuthenticate(true);
+        }
 
+    },[router.events])
+
+
+    if (!isAuthenticate){
+        return null;
+    }
 
     return (
         <>

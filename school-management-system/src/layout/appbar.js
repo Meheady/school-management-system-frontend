@@ -10,10 +10,13 @@ import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
 import Box from '@mui/material/Box';
 import Link from "@mui/material/Link";
+import {handleLogout} from "../config/axiosWrapper";
+import {useRouter} from "next/router";
+import {toast} from "react-toastify";
 
 function Appbar(props) {
     const {handleDrawerToggle} = props;
-
+    const router = useRouter();
     const [anchorElNav, setAnchorElNav] = useState(null);
     const [anchorElUser, setAnchorElUser] = useState(null);
 
@@ -31,6 +34,24 @@ function Appbar(props) {
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
     };
+
+    const logout = () => {
+        handleLogout()
+            .then((response)=>{
+                if (response != null){
+                    toast.success(response.message);
+                    localStorage.clear();
+                    sessionStorage.clear();
+                    router.push('/login')
+                }
+            })
+            .catch((error)=>{
+                localStorage.clear();
+                sessionStorage.clear();
+                router.push('/login')
+                toast.error(error.message)
+            })
+    }
 
     return (
         <>
@@ -80,7 +101,7 @@ function Appbar(props) {
                             <MenuItem onClick={handleCloseUserMenu}>
                                 <Link href="/">Change Password</Link>
                             </MenuItem>
-                            <MenuItem onClick={handleCloseUserMenu}>
+                            <MenuItem onClick={logout}>
                                 Logout
                             </MenuItem>
                         </Menu>

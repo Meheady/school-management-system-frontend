@@ -13,6 +13,9 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Head from "next/head";
+import {handleLogin, updateToken} from "../config/axiosWrapper";
+import {useRouter} from "next/router";
+import { toast } from 'react-toastify';
 
 function Copyright(props) {
     return (
@@ -32,13 +35,31 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function Login() {
+
+    const router = useRouter();
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
+        const payload = {
             email: data.get('email'),
-            password: data.get('password'),
-        });
+            password: data.get('password')
+        };
+         handleLogin(payload)
+             .then((data)=>{
+                 if (data !=null){
+                     if (data.hasOwnProperty('token')){
+                         localStorage.setItem('jwtAuth',data.token);
+                         localStorage.setItem('user',data.token);
+                         const token = data.token;
+                         updateToken(token);
+                         router.push('/')
+                         toast.success('Login successfully')
+                     }
+                 }
+             })
+             .catch((error)=>{
+                 toast.error(error.error);
+             })
     };
 
     return (
@@ -81,7 +102,7 @@ export default function Login() {
                         <Typography component="h1" variant="h5">
                             Sign in
                         </Typography>
-                        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+                        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
                             <TextField
                                 margin="normal"
                                 required
@@ -102,10 +123,6 @@ export default function Login() {
                                 id="password"
                                 autoComplete="current-password"
                             />
-                            <FormControlLabel
-                                control={<Checkbox value="remember" color="primary" />}
-                                label="Remember me"
-                            />
                             <Button
                                 type="submit"
                                 fullWidth
@@ -114,19 +131,6 @@ export default function Login() {
                             >
                                 Sign In
                             </Button>
-                            <Grid container>
-                                <Grid item xs>
-                                    <Link href="#" variant="body2">
-                                        Forgot password?
-                                    </Link>
-                                </Grid>
-                                <Grid item>
-                                    <Link href="#" variant="body2">
-                                        {"Don't have an account? Sign Up"}
-                                    </Link>
-                                </Grid>
-                            </Grid>
-                            <Copyright sx={{ mt: 5 }} />
                         </Box>
                     </Box>
                 </Grid>
