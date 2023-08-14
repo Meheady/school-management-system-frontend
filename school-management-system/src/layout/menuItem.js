@@ -3,25 +3,25 @@
 const treeItems = [
         {
             id: 1,
-            name: 'English',
+            name: 'System Setup',
             children: [
                 {
                     id: 2,
-                    name: 'Spring',
-                    children: []
-                }
-            ]
-        },
-        {
-            id: 3,
-            name: 'Italian',
-            children: [
+                    name: 'Class',
+                    path: "/class"
+                },
+                {
+                    id: 3,
+                    name: 'Year',
+                    path: "/year"
+                },
                 {
                     id: 4,
-                    name: 'Level A',
-                    children: []
-                }
+                    name: 'Group',
+                    path: "/group"
+                },
+
             ]
-        }
+        },
     ]
 export default treeItems;

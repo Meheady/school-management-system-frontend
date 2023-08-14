@@ -6,6 +6,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import TreeItem from '@mui/lab/TreeItem';
 import treeItems from "./menuItem";
+import Link from "next/Link";
 
 const drawerWidth = 240;
 function Sidebar(props) {
@@ -18,10 +19,22 @@ function Sidebar(props) {
             if (treeItemData.children && treeItemData.children.length > 0) {
                 children = getTreeItemsFromData(treeItemData.children);
             }
+            if(treeItemData.path){
+                return (
+                    <Link href={treeItemData.path}>
+                        <TreeItem
+                            key={treeItemData.id}
+                            nodeId={treeItemData.id.toString()}
+                            label={treeItemData.name}
+                            children={children}
+                        />
+                    </Link>
+                );
+            }
             return (
                 <TreeItem
                     key={treeItemData.id}
-                    nodeId={treeItemData.id}
+                    nodeId={treeItemData.id.toString()}
                     label={treeItemData.name}
                     children={children}
                 />
